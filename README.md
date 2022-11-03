@@ -54,8 +54,11 @@ This is a small personal project, but pull requests are most welcome!
 * Code is styled using `[black](https://github.com/psf/black)` (`pip install black`)
 * Code is linted with `pylint` (`pip install pylint`)
 * Requirements are managed using `pip-tools` (run `pip install pip-tools` if needed)
-    * Add dependencies by adding packages to `setup.py` and running `pip-compile`
-* [Semantic versioning](https://semver.org) is used in this repo
+    * Add dependencies by adding packages to `setup.py` and running
+        `pip-compile --annotation-style=line`
+    * Add dev dependencies to `setup.py` under `extras_require` and run
+        `pip-compile --annotation-style=line --extra=dev --output-file=requirements-dev.txt setup.py`
+* [Semantic versioning](https://semver.org) is used in this repo (shockingly)
     * Major version: rare, substantial changes that break backward compatibility
     * Minor version: most changes - new features, models or improvements
     * Patch version: small bug fixes and documentation-only changes
