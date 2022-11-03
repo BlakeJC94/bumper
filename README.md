@@ -46,6 +46,17 @@ This tool will not
 
 *Question: How does this rectify, for example, a major bump for `setup.py` and a patch bump for a
 watched file in the same PR?*
+- Idea: extra tags?
+    - not a perfect solution, will this mean a new 1-3 tags for each watched file??
+    - Maybe just 3 extra tags: watched-major, watched-minor, watched-patch
+        - Thought: If one watched file has a major bump and another one has a patch bump, maybe
+          this isn't the right approach?
+        - That's either the users fault, or maybe extra input could be parsed?
+- Idea: Parse PR content?
+    - A PR template could be useful here
+- Idea: Bump it all with the same tag
+    - This could be misleading
+    - Might be a sensible default though if nothing else given?
 
 
 ## Contributing
