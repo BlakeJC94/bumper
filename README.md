@@ -6,7 +6,7 @@ versions < 1.0.0 are unstable.
 
 Main motivation for the project:
 * Semver is cool
-* I'm forgetful and don't rememberto bump versions upon merging PRs
+* I'm forgetful and don't remember to bump versions upon merging PRs
 * My projects have a central version in `setup.py`
     * I also have many independent files within the project with a `__version__` variable I also
       (more often) forget to bump.
