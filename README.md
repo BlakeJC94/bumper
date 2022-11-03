@@ -17,7 +17,13 @@ variable in a configuration file, which means I can't bump independent files aut
 don't want to tie a tool like this to `Poetry` since not every project uses that.
 
 ## Installation
-TODO
+Clone the repo to your system and install
+
+```bash
+$ git clone https://github.com/PLACEHOLDER
+$ cd PLACEHOLDER
+$ pip install .
+```
 
 ## Quickstart
 TODO
