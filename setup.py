@@ -15,7 +15,9 @@ setup(
     url="https://github.com/BlakeJC94/bumper",
     python_requires=">=3.9",
     packages=find_packages(),
-    install_requires=[],
+    install_requires=[
+        "gitpython",
+    ],
     extras_require={
         "dev": [
             "black",
