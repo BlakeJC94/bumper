@@ -22,6 +22,7 @@ setup(
         "dev": [
             "black",
             "pip-tools",
+            "pre-commit",
             "pylint",
             "pytest",
         ],
