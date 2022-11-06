@@ -68,13 +68,15 @@ watched file in the same PR?*
 ## Contributing
 This is a small personal project, but pull requests are most welcome!
 
-* Code is styled using `[black](https://github.com/psf/black)` (`pip install black`)
+* Code is styled using `[black](https://github.com/psf/black)`
+    * Included in dev requirements
+    * Pre-commit is included in dev requirements as well
 * Code is linted with `pylint` (`pip install pylint`)
 * Requirements are managed using `pip-tools` (run `pip install pip-tools` if needed)
     * Add dependencies by adding packages to `setup.py` and running
-        `pip-compile --annotation-style=line`
+      `./scripts/compile-requirements.sh`
     * Add dev dependencies to `setup.py` under `extras_require` and run
-        `pip-compile --annotation-style=line --extra=dev --output-file=requirements-dev.txt setup.py`
+      `./scripts/compile-requirements-dev.sh`
 * [Semantic versioning](https://semver.org) is used in this repo (shockingly)
     * Major version: rare, substantial changes that break backward compatibility
     * Minor version: most changes - new features, models or improvements
