@@ -13,4 +13,3 @@ def setup_logging():
         force=True,
     )
     return logger
-

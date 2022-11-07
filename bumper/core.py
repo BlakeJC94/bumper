@@ -3,6 +3,7 @@ from git import Repo
 
 from .globals import ALLOWED_MODES, SEMVER_REGEX
 
+
 def bump(version: str, mode: str) -> str:
     """Bumps a semver version.
 
