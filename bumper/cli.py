@@ -40,7 +40,8 @@ def parse_args(args: Optional[List[str]] = None) -> Dict[str, Optional[List[str]
     if all(result[var] is None for _, var in ARGS):
         parser.parse_args(["-h"])
 
-    all_py_files = _filter_py_files(glob("**/*"))
+    # TODO update filter to get only files with __version__ strings
+    all_py_files = _filter_py_files(['setup.py', *glob("**/*")])
     for _, var in ARGS:
         if result[var] is None:
             continue
@@ -57,25 +58,37 @@ def _filter_py_files(files: List[str]) -> List[str]:
     """Filters a list of filepaths to paths that end with .py
 
     Usage:
-        >>> filter_py_files([foo.py, bar.pyc, baz.txt])
-        [foo.py]
-        >>> filter_py_files([])
+        >>> _filter_py_files(['foo.py', 'bar.pyc', 'baz.txt'])
+        ['foo.py']
+        >>> _filter_py_files([])
         []
-        >>> filter_py_files(None)
+        >>> _filter_py_files(None)
         []
     """
     if files is None:
         return []
-    return [fp for fp in set(files) if fp.endswith(".py")]
+    out = sorted([fp for fp in set(files) if fp.endswith(".py")])
+    return out if len(out) > 0 else None
+
+# def _get_version_str(file: str) -> Optional[str]:
+#     with open(file, 'wb', encoding='utf-8') as f:
+#         data = f.read().split('\n')
+#     try:
+#         version = next(line.strip() for line in data if line.strip().startswith('__version__'))
+#     except StopIteration:
+#         return None
+
+#     return version.replace("'", '"').str
 
 
-def _filter_overlaps(list_0: List[str], list_1: List[str]) -> List[str]:
+def _filter_overlaps(list_0: List[str], list_1: List[str]) -> Optional[List[str]]:
     """Filters overlaps between lists
 
     Usage:
-        >>> filter_overlaps(['foo', 'bar'], ['bar', 'baz'])
+        >>> _filter_overlaps(['foo', 'bar'], ['bar', 'baz'])
         ['foo']
     """
     if list_0 is None or list_1 is None:
         return list_0
-    return [fp for fp in list_0 if fp not in list_1]
+    out = sorted([fp for fp in list_0 if fp not in list_1])
+    return out if len(out) > 0 else None

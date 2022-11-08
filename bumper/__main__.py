@@ -11,5 +11,3 @@ def main():
     # Check overrides from args
     # replace each __version__
     return 0
-
-    # IDEA: bumper --patch foo bar --minor baz --major wumbo mini
