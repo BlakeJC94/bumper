@@ -67,7 +67,7 @@ def parse_args(args: Optional[List[str]] = None) -> Dict[str, Optional[List[str]
 
     # If empty list after filters, replace with None
     for _, var in ARGS:
-        if len(result[var]) == 0:
+        if result[var] is not None and len(result[var]) == 0:
             result[var] = None
 
     # Print help and exit if all none
