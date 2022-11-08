@@ -22,16 +22,3 @@ def test_cli_help(capsys, args):
 def test_cli_raise_invalid_args(args):
     with pytest.raises(SystemExit):
         parse_args(args.split())
-
-@pytest.mark.parametrize(
-    "args, expected",
-    [
-        (
-            "--major foo.py bar.py --minor bar.py",
-            {'major': ['foo.py', 'bar.py'], 'minor': None, 'patch': None}
-        )
-    ],
-)
-def test_cli_overlapping_inputs(args, expected):
-    result = parse_args(args.split())
-    assert result == expected

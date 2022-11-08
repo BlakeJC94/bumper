@@ -20,8 +20,12 @@ def parse_args(args: Optional[List[str]] = None) -> Dict[str, Optional[List[str]
         args: List of args passed into the cli interface (uses `sys.argv` if left as None).
 
     Usage:
-        >>> parse_args("-m foo.py bar.py -M bar.py baz.py wumbo.txt".split())
-        {'major': ['bar.py', 'baz.py'], 'minor': ['foo.py'], 'patch': None}
+        >>> parse_args("-m setup.py".split())
+        {'major': None, 'minor': ['setup.py'], 'patch': None}
+        >>> parse_args("--patch".split())
+        {'major': None, 'minor': None, 'patch': ['setup.py']}
+        >>> parse_args("-m setup.py -M setup.py".split())
+        {'major': ['setup.py'], 'minor': None, 'patch': None}
 
     """
     prog = Path(__file__).parent.name
@@ -93,7 +97,9 @@ def _is_py_file_with_version(fp: str) -> bool:
 
     with open(fp, "r", encoding="utf-8") as fh:
         try:
-            _ = next(l for l in fh.readlines() if "__version__=" in l.replace(" ", ""))
+            _ = next(
+                l for l in fh.readlines() if "__version__='" in l.replace(" ", "").replace('"', "'")
+            )
             has_version = True
         except StopIteration:
             pass
@@ -108,11 +114,9 @@ def _filter_overlaps(list_0: List[str], list_1: List[str]) -> Optional[List[str]
         >>> _filter_overlaps(['foo', 'bar'], ['bar', 'baz'])
         ['foo']
         >>> _filter_overlaps([], ['bar', 'baz'])
-        None
         >>> _filter_overlaps(['foo', 'bar'], [])
-        ['foo', 'bar']
+        ['bar', 'foo']
         >>> _filter_overlaps([], [])
-        None
     """
     if list_0 is None or list_1 is None:
         return list_0
