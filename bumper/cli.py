@@ -6,6 +6,8 @@ from importlib.metadata import metadata
 from pathlib import Path
 from typing import Optional, List, Dict
 
+from .core import is_py_file_with_version
+
 logger = logging.getLogger(__name__)
 
 ARGS = [("M", "major"), ("m", "minor"), ("p", "patch")]
@@ -62,7 +64,7 @@ def parse_args(args: Optional[List[str]] = None) -> Dict[str, Optional[List[str]
         result[var].extend(processed_globs)
 
         # Filter to selected files with versions
-        result[var] = [fp for fp in result[var] if _is_py_file_with_version(fp)]
+        result[var] = [fp for fp in result[var] if is_py_file_with_version(fp)]
 
     # Major presides over minor, which presides over patch
     result["minor"] = _filter_overlaps(result["minor"], result["major"])
@@ -79,32 +81,6 @@ def parse_args(args: Optional[List[str]] = None) -> Dict[str, Optional[List[str]
         parser.parse_args(["-h"])
 
     return result
-
-
-def _is_py_file_with_version(fp: str) -> bool:
-    """
-    Usage:
-        >>> _is_py_file_with_version('setup.py')
-        True
-        >>> _is_py_file_with_version('doesnt_exist.py')
-        False
-        >>> _is_py_file_with_version('bumper/__init__.py')
-        False
-    """
-    has_version = False
-    if not Path(fp).exists() or not fp.endswith(".py"):
-        return has_version
-
-    with open(fp, "r", encoding="utf-8") as fh:
-        try:
-            _ = next(
-                l for l in fh.readlines() if "__version__='" in l.replace(" ", "").replace('"', "'")
-            )
-            has_version = True
-        except StopIteration:
-            pass
-
-    return has_version
 
 
 def _filter_overlaps(list_0: List[str], list_1: List[str]) -> Optional[List[str]]:

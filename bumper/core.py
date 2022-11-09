@@ -79,6 +79,7 @@ def is_py_file_with_version(fp: str) -> bool:
     return has_version
 
 
+# TODO remove this for now
 def get_files_to_bump():
     repo = Repo()
 
