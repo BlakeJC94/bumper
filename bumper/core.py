@@ -45,11 +45,19 @@ def bump(version: str, mode: str) -> str:
 def get_version(file: str) -> Optional[str]:
     """Get the version string from a versioned python file.
 
+    Args:
+        file: File path.
+
+    Returns:
+        String with `__version__` variable value in file, None if there's no `__version__` variable
+        in file.
+
     Usage:
         >>> get_version('setup.py')
         '0.0.0'
     """
     version = None
+
     with open(file, "r", encoding="utf-8") as fh:
         try:
             version_line = next(
