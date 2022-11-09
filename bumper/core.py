@@ -98,24 +98,25 @@ def is_py_file_with_version(file: str) -> bool:
 
 
 # TODO remove this for now
-def get_files_to_bump():
-    repo = Repo()
+# from git import Repo
+# def get_files_to_bump():
+#     repo = Repo()
 
-    # Get the git diff between this branch and main
-    commit_branch = repo.commit()
-    commit_origin_main = repo.commit("HEAD~1")
-    diff = commit_origin_main.diff(commit_branch, create_patch=True, unified=0)
+#     # Get the git diff between this branch and main
+#     commit_branch = repo.commit()
+#     commit_origin_main = repo.commit("HEAD~1")
+#     diff = commit_origin_main.diff(commit_branch, create_patch=True, unified=0)
 
-    # Find changed files
-    changed_files = set()
-    for diff_item in diff:
-        if not diff_item.a_path:
-            continue
-        changed_files.add(diff_item.a_path)
+#     # Find changed files
+#     changed_files = set()
+#     for diff_item in diff:
+#         if not diff_item.a_path:
+#             continue
+#         changed_files.add(diff_item.a_path)
 
-    # Determine if only configs have changed (so then don't select setup.py)
-    files_to_bump = {f for f in VERSIONED_FILES if f in changed_files}
-    if any(v not in VERSIONED_FILES for v in changed_files):
-        files_to_bump.add("setup.py")
+#     # Determine if only configs have changed (so then don't select setup.py)
+#     files_to_bump = {f for f in VERSIONED_FILES if f in changed_files}
+#     if any(v not in VERSIONED_FILES for v in changed_files):
+#         files_to_bump.add("setup.py")
 
-    return files_to_bump
+#     return files_to_bump
