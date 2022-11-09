@@ -6,8 +6,16 @@ from .cli import parse_args
 def main():
     result = parse_args()
     print(result)
-    # If no files specified, determine which files have changed
-    # exclude files that have had __version__ change (globs as well?)
-    # Check overrides from args
+
+    for index, files in result.items():
+        if files is None:
+            continue
+
+        for file in files:
+            print(f"Bumping `__version__` in {file} by {index} version.")
+            version = get_version(file)
+            # bump it
+            # write version
+
     # replace each __version__
     return 0
