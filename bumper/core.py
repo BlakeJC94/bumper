@@ -1,4 +1,7 @@
 import re
+from pathlib import Path
+from typing import Optional
+
 from git import Repo
 
 from .globals import ALLOWED_MODES, SEMVER_REGEX
@@ -34,6 +37,46 @@ def bump(version: str, mode: str) -> str:
         patch = str(int(patch) + 1)
 
     return ".".join([major, minor, patch])
+
+
+def get_version(file: str) -> Optional[str]:
+    """Get the version string from a versioned python file.
+
+    Usage:
+        >>> get_version('setup.py')
+        '0.0.0'
+    """
+    version = None
+    with open(file, "r", encoding="utf-8") as fh:
+        try:
+            version_line = next(
+                l for l in fh.readlines() if "__version__='" in l.replace(" ", "").replace('"', "'")
+            )
+            version = re.search(SEMVER_REGEX, version_line)[0]
+        except StopIteration:
+            pass
+
+    return version
+
+
+def is_py_file_with_version(fp: str) -> bool:
+    """
+    Usage:
+        >>> is_py_file_with_version('setup.py')
+        True
+        >>> is_py_file_with_version('doesnt_exist.py')
+        False
+        >>> is_py_file_with_version('bumper/__init__.py')
+        False
+    """
+    has_version = False
+    if not Path(fp).exists() or not fp.endswith(".py"):
+        return has_version
+
+    if get_version(fp) is not None:
+        has_version = True
+
+    return has_version
 
 
 def get_files_to_bump():
