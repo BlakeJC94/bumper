@@ -14,6 +14,9 @@ def bump(version: str, mode: str) -> str:
         version: string representing a semver version. Must have MAJOR.MINOR.PATCH format
         mode: Whether to bump 'major', 'minor', or 'patch'.
 
+    Returns:
+        Bumped semver version string.
+
     Usage:
         >>> bump("1.2.3", "patch")
         '1.2.4'
