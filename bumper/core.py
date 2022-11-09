@@ -70,11 +70,11 @@ def get_version(file: str) -> Optional[str]:
     return version
 
 
-def is_py_file_with_version(fp: str) -> bool:
+def is_py_file_with_version(file: str) -> bool:
     """Return whether the file exists and has a `__version__` variable.
 
     Args:
-        fp: File path
+        file: File path
 
     Returns:
         True or False.
@@ -88,10 +88,10 @@ def is_py_file_with_version(fp: str) -> bool:
         False
     """
     has_version = False
-    if not Path(fp).exists() or not fp.endswith(".py"):
+    if not Path(file).exists() or not file.endswith(".py"):
         return has_version
 
-    if get_version(fp) is not None:
+    if get_version(file) is not None:
         has_version = True
 
     return has_version
