@@ -60,7 +60,14 @@ def get_version(file: str) -> Optional[str]:
 
 
 def is_py_file_with_version(fp: str) -> bool:
-    """
+    """Return whether the file exists and has a `__version__` variable.
+
+    Args:
+        fp: File path
+
+    Returns:
+        True or False.
+
     Usage:
         >>> is_py_file_with_version('setup.py')
         True
