@@ -2,8 +2,6 @@ import re
 from pathlib import Path
 from typing import Optional
 
-from git import Repo
-
 from .globals import ALLOWED_MODES, SEMVER_REGEX
 
 
@@ -69,6 +67,33 @@ def get_version(file: str) -> Optional[str]:
             pass
 
     return version
+
+
+def get_version_from_line(line: str) -> Optional[str]:  # TODO docs and tests
+    version = None
+    if line_has_version(line):
+        version = re.search(SEMVER_REGEX, line)[0]
+    return version
+
+
+def line_has_version(line: str) -> bool:
+    """Check if line of test has a '__version__' string constant defined.
+
+    Usage:
+        >>> line_has_version("  __version__ = '0.0.0'")
+        True
+        >>> line_has_version("__version__ = '0.0.0'")
+        True
+        >>> line_has_version("foo = bar(baz)")
+        False
+        >>> line_has_version("  __version__ = 'foo'")
+        False
+    """
+    has_version = False
+    stripped_line = line.replace(" ", "").replace('"', "'")
+    if "__version__='" in stripped_line and re.match(SEMVER_REGEX, line):
+        has_version = True
+    return has_version
 
 
 def is_py_file_with_version(file: str) -> bool:
