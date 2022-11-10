@@ -91,7 +91,7 @@ def line_has_version(line: str) -> bool:
     """
     has_version = False
     stripped_line = line.replace(" ", "").replace('"', "'")
-    if "__version__='" in stripped_line and re.match(SEMVER_REGEX, line):
+    if "__version__='" in stripped_line and re.search(SEMVER_REGEX, line):
         has_version = True
     return has_version
 
