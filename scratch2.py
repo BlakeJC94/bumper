@@ -7,29 +7,24 @@ from bumper.core import bump, get_version_from_line
 from bumper.globals import SEMVER_REGEX
 
 
-DEST = "scrap.new.txt"
-SEMVER_REGEX_COMPILED = re.compile(SEMVER_REGEX)
+SRC = "scrap.txt"
 
 
+fp_tmp = SRC + ".bumper"
 with (
-    open("scrap.txt", encoding="utf-8") as fh,
-    NamedTemporaryFile(mode="w", encoding="utf-8") as fh_tmp,
+    open(fp_tmp, mode="w", encoding="utf-8") as fh_tmp,
+    open(SRC, encoding="utf-8") as fh,
 ):
-    fn_tmp = fh.name
-
     version_bumped = False
-    for line in fh.readlines():
+    for i, line in enumerate(fh.readlines()):
+        line_to_write = line
         if not version_bumped and (version := get_version_from_line(line)) is not None:
             new_version = bump(version, mode="patch")
-            new_line = re.sub(SEMVER_REGEX_COMPILED, line, new_version)
-            fh_tmp.write(new_line)
-            # TODO test
+            line_to_write = re.sub(SEMVER_REGEX, new_version, line)
+            version_bumped = True
+        fh_tmp.write(line)
 
-        else:
-            fh_tmp.write(line)
-
-copy(fn_tmp, DEST)
-remove(fn_tmp)
+copy(fp_tmp, SRC)
 
 
 # import fileinput
