@@ -60,10 +60,11 @@ def get_version(file: str) -> Optional[str]:
 
     with open(file, "r", encoding="utf-8") as fh:
         try:
-            version_line = next(
-                l for l in fh.readlines() if "__version__='" in l.replace(" ", "").replace('"', "'")
+            version = next(
+                get_version_from_line(l)
+                for l in fh.readlines()
+                if get_version_from_line(l) is not None
             )
-            version = re.search(SEMVER_REGEX, version_line)[0]
         except StopIteration:
             pass
 
