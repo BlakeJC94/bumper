@@ -102,7 +102,20 @@ def get_version(file: str) -> Optional[str]:
     return version
 
 
-def get_version_from_line(line: str) -> Optional[str]:  # TODO docs and tests
+def get_version_from_line(line: str) -> Optional[str]:
+    """Gets version string from a line of a file.
+
+    Args:
+        line: String from a line of a file.
+
+    Usage:
+        >>> version = get_version_from_line("__version__ = '1.2.3'")
+        >>> print(version)
+        1.2.3
+        >>> version = get_version_from_line("foo(bar) = baz")
+        >>> print(version)
+        None
+    """
     version = None
     if line_has_version(line):
         version = re.search(SEMVER_REGEX, line)[0]

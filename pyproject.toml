@@ -139,7 +139,7 @@ min-public-methods = 0
 
 [tool.pytest.ini_options]
 
-addopts = "--doctest-modules --doctest-continue-on-failure"
+addopts = "--doctest-modules --doctest-continue-on-failure --cov"
 
 doctest_optionflags = "NORMALIZE_WHITESPACE IGNORE_EXCEPTION_DETAIL NUMBER"
 
