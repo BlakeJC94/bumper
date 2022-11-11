@@ -1,4 +1,6 @@
+import os
 import re
+import shutil
 from pathlib import Path
 from typing import Optional
 
@@ -38,6 +40,37 @@ def bump(version: str, mode: str) -> str:
         patch = str(int(patch) + 1)
 
     return ".".join([major, minor, patch])
+
+
+def bump_file(file: str, mode: str):
+    """Bumps the first semver `__version__` variable in the file.
+
+    Args:
+        file: Path to file to bump.
+        mode: How to bump the file (see docs for `bump`).
+    """
+    if not is_py_file_with_version(file):
+        return
+
+    fp_tmp = file + ".bumper"
+    with (
+        open(fp_tmp, mode="w", encoding="utf-8") as fh_tmp,
+        open(file, encoding="utf-8") as fh,
+    ):
+        version_bumped = False
+
+        for line in fh.readlines():
+            line_to_write = line
+
+            if not version_bumped and (version := get_version_from_line(line)) is not None:
+                new_version = bump(version, mode=mode)
+                line_to_write = re.sub(SEMVER_REGEX, new_version, line)
+                version_bumped = True
+
+            fh_tmp.write(line_to_write)
+
+    shutil.copy(fp_tmp, file)
+    os.remove(fp_tmp)
 
 
 def get_version(file: str) -> Optional[str]:
