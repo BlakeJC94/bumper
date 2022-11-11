@@ -1,21 +1,28 @@
-from .cli import parse_args
+import logging
+import sys
 
+from .cli import parse_args
+from .core import bump_file
+
+
+logger = logging.getLogger(__file__)
 # bumper will automatically look at git diffs and determine where to bump
 
 
 def main():
     result = parse_args()
-    print(result)
+    logger.info(f"Parsed input: {repr(result)}")
 
-    for index, files in result.items():
+    for mode, files in result.items():
         if files is None:
             continue
 
         for file in files:
-            print(f"Bumping `__version__` in {file} by {index} version.")
-            version = get_version(file)
-            # bump it
-            # write version
+            logger.info(f"Bumping `__version__` in {file} by {mode} version.")
+            bump_file(file, mode)
 
-    # replace each __version__
     return 0
+
+
+if __name__ == "__main__":
+    sys.exit(main())
