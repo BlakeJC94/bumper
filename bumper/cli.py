@@ -66,10 +66,16 @@ def parse_args(args: Optional[List[str]] = None) -> Dict[str, Optional[List[str]
         # Filter to selected files with versions
         result[var] = [fp for fp in result[var] if is_py_file_with_version(fp)]
 
-    # Major presides over minor, which presides over patch
-    result["minor"] = _filter_overlaps(result["minor"], result["major"])
-    result["patch"] = _filter_overlaps(result["patch"], result["major"])
-    result["patch"] = _filter_overlaps(result["patch"], result["minor"])
+    # Major presides over minor
+    if result["minor"] is not None and result["major"] is not None:
+        result["minor"] = _filter_overlaps(result["minor"], result["major"])
+
+    # Major and minor preside over patch
+    if result["patch"] is not None:
+        if result["major"] is not None:
+            result["patch"] = _filter_overlaps(result["patch"], result["major"])
+        if result["minor"] is not None:
+            result["patch"] = _filter_overlaps(result["patch"], result["minor"])
 
     # If empty list after filters, replace with None
     for _, var in ARGS:
@@ -83,18 +89,18 @@ def parse_args(args: Optional[List[str]] = None) -> Dict[str, Optional[List[str]
     return result
 
 
-def _filter_overlaps(list_0: List[str], list_1: List[str]) -> Optional[List[str]]:
+def _filter_overlaps(list_0: List[str], list_1: List[str]) -> List[str]:
     """Filters overlaps between lists
 
     Usage:
         >>> _filter_overlaps(['foo', 'bar'], ['bar', 'baz'])
         ['foo']
         >>> _filter_overlaps([], ['bar', 'baz'])
+        []
         >>> _filter_overlaps(['foo', 'bar'], [])
         ['bar', 'foo']
         >>> _filter_overlaps([], [])
+        []
     """
-    if list_0 is None or list_1 is None:
-        return list_0
     out = [fp for fp in list_0 if fp not in list_1]
-    return sorted(out) if len(out) > 0 else None
+    return sorted(out) if len(out) > 0 else []
