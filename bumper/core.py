@@ -48,6 +48,9 @@ def bump_file(file: str, mode: str):
     Args:
         file: Path to file to bump.
         mode: How to bump the file (see docs for `bump`).
+
+    Usage:
+        >>> bump_file('setup.py')  # doctest +SKIP
     """
     if not is_py_file_with_version(file):
         return
