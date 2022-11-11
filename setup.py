@@ -25,6 +25,7 @@ setup(
             "pre-commit",
             "pylint",
             "pytest",
+            "pytest-cov",
         ],
     },
     entry_points={
