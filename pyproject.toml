@@ -146,3 +146,8 @@ doctest_optionflags = "NORMALIZE_WHITESPACE IGNORE_EXCEPTION_DETAIL NUMBER"
 # filterwarnings = [
 #     "ignore:PLACEHOLDER is deprecated:DeprecationWarning",
 # ]
+
+
+[tool.coverage.run]
+
+omit = ["tests/*"]
