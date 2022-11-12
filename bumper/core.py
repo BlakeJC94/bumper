@@ -1,7 +1,6 @@
 import os
 import re
 import shutil
-from pathlib import Path
 from typing import Optional
 
 from .globals import ALLOWED_MODES, SEMVER_REGEX
@@ -50,9 +49,10 @@ def bump_file(file: str, mode: str):
         mode: How to bump the file (see docs for `bump`).
 
     Usage:
-        >>> bump_file('setup.py')  # doctest +SKIP
+        >>> bump_file('setup.py')  # doctest: +SKIP
     """
     if not is_py_file_with_version(file):
+        breakpoint()
         return
 
     fp_tmp = file + ".bumper"
@@ -60,6 +60,7 @@ def bump_file(file: str, mode: str):
         open(fp_tmp, mode="w", encoding="utf-8") as fh_tmp,
         open(file, encoding="utf-8") as fh,
     ):
+        breakpoint()
         version_bumped = False
 
         for line in fh.readlines():
@@ -72,6 +73,7 @@ def bump_file(file: str, mode: str):
 
             fh_tmp.write(line_to_write)
 
+    breakpoint()
     shutil.copy(fp_tmp, file)
     os.remove(fp_tmp)
 
@@ -163,7 +165,7 @@ def is_py_file_with_version(file: str) -> bool:
         False
     """
     has_version = False
-    if not Path(file).exists() or not file.endswith(".py"):
+    if not os.path.exists(file) or not file.endswith(".py"):
         return has_version
 
     if get_version(file) is not None:
