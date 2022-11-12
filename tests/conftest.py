@@ -1,11 +1,36 @@
+import os
+import logging
+import tempfile
 from pathlib import Path
 
 import pytest
+
+logger = logging.getLogger(__file__)
 
 
 @pytest.fixture(autouse=True)
 def _import_modules_for_doctest(doctest_namespace):
     doctest_namespace["Path"] = Path
+
+
+@pytest.fixture
+def test_file(version, template):
+    with open(template, "r", encoding="utf-8") as fh:
+        data = fh.read()
+
+    version_marker = "%VERSION%"
+    if version_marker in data:
+        data = data.replace(version_marker, f'"{version}"', 1)
+
+    # setup fixture
+    file = tempfile.mkstemp()[1] + ".py"
+    with open(file, "w", encoding="utf-8") as fh:
+        fh.write(data)
+
+    yield file
+
+    # teardown fixture
+    os.remove(file)
 
 
 FILE_CONTENTS_WITH_VERSION = """'''Mock file with version'''

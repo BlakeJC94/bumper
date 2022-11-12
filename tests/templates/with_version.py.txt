@@ -1,0 +1,15 @@
+"""Mock file with version"""
+from foo import bar, baz
+
+__version__ = %VERSION%
+
+class Foo:
+    bar = bar
+    baz = baz
+
+    def __init__(self)
+        self.barbaz = [bar, baz]
+
+if __name__ == "__main__":
+    bar(Foo().barbaz)
+
