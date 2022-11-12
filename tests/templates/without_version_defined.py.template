@@ -1,0 +1,14 @@
+"""Mock file without version symbol"""
+from foo import bar, baz, __version__
+
+class Foo:
+    bar = bar
+    baz = baz
+    version = __version__
+
+    def __init__(self)
+        self.barbaz = [bar, baz]
+
+if __name__ == "__main__":
+    bar(Foo().barbaz)
+
