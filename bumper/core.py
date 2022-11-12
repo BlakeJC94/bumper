@@ -52,7 +52,6 @@ def bump_file(file: str, mode: str):
         >>> bump_file('setup.py')  # doctest: +SKIP
     """
     if not is_py_file_with_version(file):
-        breakpoint()
         return
 
     fp_tmp = file + ".bumper"
@@ -60,7 +59,6 @@ def bump_file(file: str, mode: str):
         open(fp_tmp, mode="w", encoding="utf-8") as fh_tmp,
         open(file, encoding="utf-8") as fh,
     ):
-        breakpoint()
         version_bumped = False
 
         for line in fh.readlines():
@@ -73,7 +71,6 @@ def bump_file(file: str, mode: str):
 
             fh_tmp.write(line_to_write)
 
-    breakpoint()
     shutil.copy(fp_tmp, file)
     os.remove(fp_tmp)
 
