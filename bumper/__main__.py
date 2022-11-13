@@ -1,8 +1,8 @@
 import logging
 import sys
 
-from .cli import parse_args
-from .core import bump_file
+from bumper.cli import parse_args
+from bumper.core import bump_file
 
 
 logger = logging.getLogger(__file__)
