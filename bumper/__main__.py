@@ -19,7 +19,8 @@ def main():
 
         for file in files:
             logger.info(f"Bumping `__version__` in {file} by {mode} version.")
-            bump_file(file, mode)
+            if not result["dryrun"]:
+                bump_file(file, mode)
 
     return 0
 

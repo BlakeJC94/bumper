@@ -27,6 +27,14 @@ def _get_parser():
             metavar="FILES",
             help=f"Bump `__version__` in FILES by {arg_long} version.",
         )
+
+    parser.add_argument(
+        "-d",
+        "--dryrun",
+        action="store_true",
+        help="Don't modify files and print resulting actions if given",
+    )
+
     return parser
 
 
@@ -40,11 +48,11 @@ def parse_args(args: Optional[List[str]] = None) -> Dict[str, Optional[List[str]
 
     Usage:
         >>> parse_args("-m setup.py".split())
-        {'major': None, 'minor': ['setup.py'], 'patch': None}
+        {'major': None, 'minor': ['setup.py'], 'patch': None, 'dryrun': False}
         >>> parse_args("--patch".split())
-        {'major': None, 'minor': None, 'patch': ['setup.py']}
+        {'major': None, 'minor': None, 'patch': ['setup.py'], 'dryrun': False}
         >>> parse_args("-m setup.py -M setup.py".split())
-        {'major': ['setup.py'], 'minor': None, 'patch': None}
+        {'major': ['setup.py'], 'minor': None, 'patch': None, 'dryrun': False}
 
     """
     parser = _get_parser()

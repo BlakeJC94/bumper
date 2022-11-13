@@ -66,4 +66,21 @@ def test_cli_no_duplicates():
 def test_cli_overlapping_args(cli_args, expected):
     """Make sure globs only pick up files in a __version__ symbol defined"""
     result = parse_args(cli_args.split())
-    assert result == dict(expected)
+    expected = dict(expected)
+    for key in expected:
+        assert result[key] == expected[key]
+
+
+@pytest.mark.parametrize(
+    "cli_args",
+    [
+        "--patch setup.py",
+        "--patch setup.py --dryrun",
+    ],
+)
+def test_cli_dryrun(cli_args):
+    result = parse_args(cli_args.split())
+    assert result["major"] is None
+    assert result["minor"] is None
+    assert result["patch"] == ["setup.py"]
+    assert result["dryrun"] == ("dryrun" in cli_args)
