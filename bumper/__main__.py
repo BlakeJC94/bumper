@@ -14,13 +14,15 @@ def main():
     logger.info(f"Parsed input: {repr(result)}")
 
     for mode, files in result.items():
-        if files is None:
+        if files is None or mode == "dryrun":
             continue
 
         for file in files:
             logger.info(f"Bumping `__version__` in {file} by {mode} version.")
             if not result["dryrun"]:
                 bump_file(file, mode)
+            else:
+                logger.info(f"File unmodified, dryrun is active.")
 
     return 0
 
