@@ -1,5 +1,4 @@
 import logging
-import re
 from argparse import ArgumentParser
 from glob import glob
 from importlib.metadata import metadata
@@ -13,8 +12,26 @@ logger = logging.getLogger(__name__)
 ARGS = [("M", "major"), ("m", "minor"), ("p", "patch")]
 
 
-# TODO: I should check if `setup.py` has __version__...
+def _get_parser():
+    """Construct an argparse parser."""
+    prog = Path(__file__).parent.name
+    parser = ArgumentParser(
+        prog=prog, description=metadata(prog)["Summary"], add_help=True, epilog=""
+    )
+
+    for arg_short, arg_long in ARGS:
+        parser.add_argument(
+            "-" + arg_short,
+            "--" + arg_long,
+            nargs="*",
+            metavar="FILES",
+            help=f"Bump `__version__` in FILES by {arg_long} version.",
+        )
+    return parser
+
+
 # TODO: (Downstream) bump version only if change is detected (something for the GH action?)
+# TODO: Use a namespace rather than a dict?
 def parse_args(args: Optional[List[str]] = None) -> Dict[str, Optional[List[str]]]:
     """Parser for CLI interface that converts command line args to a python dictionary.
 
@@ -30,20 +47,7 @@ def parse_args(args: Optional[List[str]] = None) -> Dict[str, Optional[List[str]
         {'major': ['setup.py'], 'minor': None, 'patch': None}
 
     """
-    prog = Path(__file__).parent.name
-    parser = ArgumentParser(
-        prog=prog, description=metadata(prog)["Summary"], add_help=True, epilog=""
-    )
-
-    for arg_short, arg_long in ARGS:
-        parser.add_argument(
-            "-" + arg_short,
-            "--" + arg_long,
-            nargs="*",
-            metavar="FILES",
-            help=f"Bump `__version__` in FILES by {arg_long} version.",
-        )
-
+    parser = _get_parser()
     result = vars(parser.parse_args(args))
 
     # Filter args
@@ -51,7 +55,7 @@ def parse_args(args: Optional[List[str]] = None) -> Dict[str, Optional[List[str]
         if result[var] is None:
             continue
 
-        # Set default value (when arg is called with out inputs)
+        # Set default value (when arg is called without inputs)
         if len(result[var]) == 0:
             result[var] = ["setup.py"]
 

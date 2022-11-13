@@ -3,23 +3,23 @@ import pytest
 from bumper.cli import parse_args
 
 
-@pytest.mark.parametrize("args", ["-h", "--help", ""])
-def test_cli_help(capsys, args):
+@pytest.mark.parametrize("cli_args", ["-h", "--help", ""])
+def test_cli_help(capsys, cli_args):
     """Test that the help dialog is printed to stderr if given help flag."""
     with pytest.raises(SystemExit):
-        parse_args(args.split())
+        parse_args(cli_args.split())
     assert "usage:" in capsys.readouterr().out
 
 
 @pytest.mark.parametrize(
-    "args",
+    "cli_args",
     [
         "foo bar",  # no options given
         "--badarg foo bar",
         "--badarg",
     ],
 )
-def test_cli_raise_invalid_args(args):
+def test_cli_raise_invalid_args(cli_args):
     with pytest.raises(SystemExit):
         parse_args(cli_args.split())
 
