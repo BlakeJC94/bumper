@@ -21,4 +21,49 @@ def test_cli_help(capsys, args):
 )
 def test_cli_raise_invalid_args(args):
     with pytest.raises(SystemExit):
-        parse_args(args.split())
+        parse_args(cli_args.split())
+
+
+def test_cli_globs_parsed():
+    """Make sure globs only pick up files in a __version__ symbol defined"""
+    cli_args = "--patch *"
+    result = parse_args(cli_args.split())
+    assert result["major"] is None
+    assert result["minor"] is None
+    assert result["patch"] == ["setup.py"]
+
+
+def test_cli_no_duplicates():
+    """Make sure globs only pick up files in a __version__ symbol defined"""
+    cli_args = "--patch setup.py setup.py"
+    result = parse_args(cli_args.split())
+    assert result["major"] is None
+    assert result["minor"] is None
+    assert result["patch"] == ["setup.py"]
+
+
+@pytest.mark.parametrize(
+    "cli_args, expected",
+    [
+        (
+            "--patch setup.py --minor setup.py",
+            [("major", None), ("minor", ["setup.py"]), ("patch", None)],
+        ),
+        (
+            "--major setup.py --minor setup.py",
+            [("major", ["setup.py"]), ("minor", None), ("patch", None)],
+        ),
+        (
+            "--major setup.py --patch setup.py",
+            [("major", ["setup.py"]), ("minor", None), ("patch", None)],
+        ),
+        (
+            "--major setup.py --minor setup.py --patch setup.py",
+            [("major", ["setup.py"]), ("minor", None), ("patch", None)],
+        ),
+    ],
+)
+def test_cli_overlapping_args(cli_args, expected):
+    """Make sure globs only pick up files in a __version__ symbol defined"""
+    result = parse_args(cli_args.split())
+    assert result == dict(expected)
